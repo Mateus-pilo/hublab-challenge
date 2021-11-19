@@ -21,12 +21,12 @@ export class SocketGateway
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('Socket');
 
-  @SubscribeMessage('server')
+  @SubscribeMessage('msgToServer')
   handleMessage(
     client: Socket,
     message: { senderId: string; roomId: string; message: string },
   ): void {
-    this.server.to(message.roomId).emit('client', message.message);
+    this.server.to(message.roomId).emit('msgToClient', message.message);
   }
 
   @SubscribeMessage('enterRoom')
@@ -34,7 +34,7 @@ export class SocketGateway
     client: Socket,
     message: { roomId: string; userId: string },
   ) {
-    this.logger.log(`Enter Room: ${message.roomId}`);
+    this.logger.log(JSON.stringify(message));
     client.join(message.roomId);
     client.emit('enterRoom', message.roomId);
     await this.roomService.toEnterRoom(message.roomId, message.userId);
