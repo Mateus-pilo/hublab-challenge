@@ -1,6 +1,6 @@
 # HUBLAB CHALLENGE
 
-Test of backend position in Keycash
+The purpose of this test is to measure knowledge in these technologies, for the backend-Developer vacancy
 
 ## Used Frameworks
 
