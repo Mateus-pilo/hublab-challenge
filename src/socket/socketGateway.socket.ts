@@ -34,7 +34,7 @@ export class SocketGateway
     client: Socket,
     message: { roomId: string; userId: string },
   ) {
-    this.logger.log(JSON.stringify(message));
+    this.logger.log(`Enter in Room: ${message.roomId}`);
     client.join(message.roomId);
     client.emit('enterRoom', message.roomId);
     await this.roomService.toEnterRoom(message.roomId, message.userId);
@@ -45,6 +45,7 @@ export class SocketGateway
     client: Socket,
     message: { userId: string; roomId: string },
   ) {
+    this.logger.log(`Leave Room: ${message.roomId}`);
     client.leave(message.roomId);
     client.emit('leaveRoom', message.roomId);
     await this.roomService.toEnterRoom(null, message.userId);
