@@ -1,4 +1,4 @@
-### HUBLAB CHALLENGE
+# HUBLAB CHALLENGE
 
 Test of backend position in Keycash
 
