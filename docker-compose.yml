@@ -1,0 +1,53 @@
+version: '3.3'
+
+networks:
+  challenge:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.58.0/24
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    hostname: mongodb
+    env_file:
+      - .env
+    volumes:
+      - ./db-data:/data/db
+      - ./src/config/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin-user
+      MONGO_INITDB_ROOT_PASSWORD: admin-password
+      DB_NAME: $DATABASE_MONGO
+      DB_USER: $USER_MONGO
+      DB_PASSWORD: $PASSWORD_MONGO
+    networks:
+      - challenge
+    ports:
+      - '27017:27017'
+  api_challenge:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    image: challenge/challenge_hublab
+    container_name: challenge_hublab
+    env_file:
+      - ./.env
+    networks:
+      - challenge
+    ports:
+      - 3001:3000
+    volumes:
+      - ./:/challenge_hublab
+      - /usr/src/challenge_hublab/node_modules # anonymous volume for node_modules only
+    stdin_open: true
+    tty: true
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+
+volumes:
+  esdata:
+  db_data:
